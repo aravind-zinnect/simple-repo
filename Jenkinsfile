@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
     parameters {
@@ -10,6 +9,10 @@ pipeline {
         stage("Check Credentials") {
             steps {
                 script {
+                    // Print the username for debugging purposes (avoid printing password for security reasons)
+                    echo "Entered username: ${params.USERNAME}"
+                    
+                    // Check if the provided credentials are correct
                     if (params.USERNAME != 'user1' || params.PASSWORD != '111') {
                         error "Invalid username or password. Pipeline will not proceed."
                     }
