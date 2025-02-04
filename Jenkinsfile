@@ -1,26 +1,29 @@
 pipeline {
     agent any
 
-    parameters {
-        string(name: 'USERNAME', defaultValue: '', description: 'Enter Username')
-        password(name: 'PASSWORD', defaultValue: '', description: 'Enter Password')
-    }
-
     environment {
         validUsername = 'user1'
-        // Use credentials from Jenkins' Credentials Manager
-        validPassword = credentials('my-jenkins-password-id')  // Replace with your actual credential ID
+        validPassword = '111'
     }
 
     stages {
         stage("Check Credentials") {
             steps {
                 script {
-                    def username = params.USERNAME
-                    def password = params.PASSWORD
+                    // Prompt the user to enter username and password
+                    def userInput = input(
+                        message: 'Please enter your credentials',
+                        parameters: [
+                            string(name: 'username', defaultValue: '', description: 'Enter username'),
+                            password(name: 'password', defaultValue: '', description: 'Enter password')
+                        ]
+                    )
+                    
+                    def enteredUsername = userInput['username']
+                    def enteredPassword = userInput['password']
 
-                    // Compare entered username and password
-                    if (username != validUsername || password != validPassword) {
+                    // Check the credentials
+                    if (enteredUsername != validUsername || enteredPassword != validPassword) {
                         error "Invalid username or password. Pipeline will not proceed."
                     }
                 }
@@ -29,45 +32,46 @@ pipeline {
 
         stage("Build") {
             when {
-                expression { 
-                    return params.USERNAME == validUsername && params.PASSWORD == validPassword 
+                expression {
+                    // Check if credentials are valid
+                    return enteredUsername == validUsername && enteredPassword == validPassword
                 }
             }
             steps {
-                echo "build......."
+                echo "Building......."
             }
         }
 
         stage("Stage") {
             when {
-                expression { 
-                    return params.USERNAME == validUsername && params.PASSWORD == validPassword 
+                expression {
+                    return enteredUsername == validUsername && enteredPassword == validPassword
                 }
             }
             steps {
-                echo "stage......."
+                echo "Stage......."
             }
         }
 
         stage("Check") {
             when {
-                expression { 
-                    return params.USERNAME == validUsername && params.PASSWORD == validPassword 
+                expression {
+                    return enteredUsername == validUsername && enteredPassword == validPassword
                 }
             }
             steps {
-                echo "check......."
+                echo "Check......."
             }
         }
 
         stage("Develop") {
             when {
-                expression { 
-                    return params.USERNAME == validUsername && params.PASSWORD == validPassword 
+                expression {
+                    return enteredUsername == validUsername && enteredPassword == validPassword
                 }
             }
             steps {
-                echo "develop......."
+                echo "Develop......."
             }
         }
     }
