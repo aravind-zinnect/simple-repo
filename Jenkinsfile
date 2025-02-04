@@ -8,7 +8,8 @@ pipeline {
 
     environment {
         validUsername = 'user1'
-        validPassword = '111'
+        // Use credentials from Jenkins' Credentials Manager
+        validPassword = credentials('my-jenkins-password-id')  // Replace with your actual credential ID
     }
 
     stages {
@@ -18,6 +19,7 @@ pipeline {
                     def username = params.USERNAME
                     def password = params.PASSWORD
 
+                    // Compare entered username and password
                     if (username != validUsername || password != validPassword) {
                         error "Invalid username or password. Pipeline will not proceed."
                     }
@@ -35,7 +37,7 @@ pipeline {
                 echo "build......."
             }
         }
-        
+
         stage("Stage") {
             when {
                 expression { 
