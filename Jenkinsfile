@@ -22,7 +22,7 @@ pipeline {
                     )
 
                     // Compare entered credentials with stored values
-                    if (userInput.userInputName == username || userInput.userInputPassword == password) {
+                    if (userInput.userInputName != username || userInput.userInputPassword != password) {
                         error "Invalid username or password. Pipeline will not proceed."
                     }
                 }
