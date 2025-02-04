@@ -1,26 +1,40 @@
-pipeline{
 
+pipeline {
     agent any
+    parameters {
+        string(name: 'USERNAME', defaultValue: '', description: 'Enter your username')
+        password(name: 'PASSWORD', defaultValue: '', description: 'Enter your password')
+    }
 
-    stages{
-        stage("build"){
-            steps{
-              echo "build......."
+    stages {
+        stage("Check Credentials") {
+            steps {
+                script {
+                    if (params.USERNAME != 'user1' || params.PASSWORD != '111') {
+                        error "Invalid username or password. Pipeline will not proceed."
+                    }
+                }
             }
         }
-        stage("stage"){
-            steps{
-              echo "stage......."
+
+        stage("Build") {
+            steps {
+                echo "build......."
             }
         }
-        stage("check"){
-            steps{
-              echo "check......."
+        stage("Stage") {
+            steps {
+                echo "stage......."
             }
         }
-        stage("develop"){
-            steps{
-              echo "develop......."
+        stage("Check") {
+            steps {
+                echo "check......."
+            }
+        }
+        stage("Develop") {
+            steps {
+                echo "develop......."
             }
         }
     }
