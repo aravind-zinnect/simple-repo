@@ -1,18 +1,18 @@
-
-
 pipeline {
     agent any
 
     environment {
         username = 'user1'
         password = '111'
+        userInputName = ''
+        userInputPassword = ''
     }
 
     stages {
         stage("Get User Credentials") {
             steps {
                 script {
-                    // Prompt user for input
+                    // Prompt user for input and store it in environment variables
                     def userInput = input(
                         message: 'Enter credentials',
                         parameters: [
@@ -21,8 +21,12 @@ pipeline {
                         ]
                     )
 
+                    // Set environment variables for later stages
+                    env.userInputName = userInput.userInputName
+                    env.userInputPassword = userInput.userInputPassword
+
                     // Compare entered credentials with stored values
-                    if (userInput.userInputName != username || userInput.userInputPassword != password) {
+                    if (env.userInputName != username || env.userInputPassword != password) {
                         error "Invalid username or password. Pipeline will not proceed."
                     }
                 }
@@ -33,7 +37,7 @@ pipeline {
             when {
                 expression {
                     // Ensure credentials were validated in the previous stage
-                    return userInput.userInputName == username && userInput.userInputPassword == password
+                    return env.userInputName == username && env.userInputPassword == password
                 }
             }
             steps {
@@ -44,7 +48,7 @@ pipeline {
         stage("Stage") {
             when {
                 expression {
-                    return userInput.userInputName == username && userInput.userInputPassword == password
+                    return env.userInputName == username && env.userInputPassword == password
                 }
             }
             steps {
@@ -55,7 +59,7 @@ pipeline {
         stage("Check") {
             when {
                 expression {
-                    return userInput.userInputName == username && userInput.userInputPassword == password
+                    return env.userInputName == username && env.userInputPassword == password
                 }
             }
             steps {
@@ -66,7 +70,7 @@ pipeline {
         stage("Develop") {
             when {
                 expression {
-                    return userInput.userInputName == username && userInput.userInputPassword == password
+                    return env.userInputName == username && env.userInputPassword == password
                 }
             }
             steps {
