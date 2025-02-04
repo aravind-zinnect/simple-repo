@@ -10,7 +10,7 @@ pipeline {
                     def password = '111'
 
                     // Check if the provided credentials are correct
-                    if (username != 'user1' || password != '111') {
+                    if (username != 'user11' || password != '1111') {
                         error "Invalid username or password. Pipeline will not proceed."
                     }
                 }
