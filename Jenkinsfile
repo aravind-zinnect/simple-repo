@@ -1,19 +1,16 @@
 pipeline {
     agent any
-    parameters {
-        string(name: 'USERNAME', defaultValue: '', description: 'Enter your username')
-        password(name: 'PASSWORD', defaultValue: '', description: 'Enter your password')
-    }
 
     stages {
         stage("Check Credentials") {
             steps {
                 script {
-                    // Print the username for debugging purposes (avoid printing password for security reasons)
-                    echo "Entered username: ${params.USERNAME}"
-                    
+                    // Hardcoded credentials (username: 'user1' and password: '111')
+                    def username = 'user1'
+                    def password = '111'
+
                     // Check if the provided credentials are correct
-                    if (params.USERNAME != 'user1' || params.PASSWORD != '111') {
+                    if (username != 'user1' || password != '111') {
                         error "Invalid username or password. Pipeline will not proceed."
                     }
                 }
