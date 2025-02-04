@@ -1,42 +1,31 @@
 pipeline {
     agent any
-    
-    environment {
-        DOCKER_IMAGE = 'your-docker-image-name'
-    }
 
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                // Checkout the code from GitHub
-                git 'https://github.com/your-username/simple-repo.git'
+                git 'https://github.com/aravind-zinnect/simple-repo.git'
             }
         }
-        
-        stage('Build with Maven') {
+
+        stage('Build') {
             steps {
-                // Run Maven build
-                script {
-                    sh 'mvn clean install'
-                }
+                echo 'Building the application...'
+                // Add build commands here (e.g., Maven or npm)
             }
         }
-        
-        stage('Build Docker Image') {
+
+        stage('Test') {
             steps {
-                // Build Docker image
-                script {
-                    sh 'docker build -t $DOCKER_IMAGE .'
-                }
+                echo 'Running tests...'
+                // Add testing commands here
             }
         }
-        
-        stage('Push Docker Image') {
+
+        stage('Deploy') {
             steps {
-                // Push Docker image to DockerHub or other registry
-                script {
-                    sh 'docker push $DOCKER_IMAGE'
-                }
+                echo 'Deploying the application...'
+                // Add deployment commands (e.g., Docker, SCP, Kubernetes)
             }
         }
     }
