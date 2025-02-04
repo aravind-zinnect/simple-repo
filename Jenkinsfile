@@ -1,31 +1,26 @@
-pipeline {
+pipeline{
+
     agent any
 
-    stages {
-        stage('Clone Repository') {
-            steps {
-                git 'https://github.com/aravind-zinnect/simple-repo.git'
+    stages{
+        stage("build"){
+            steps{
+              echo "build......."
             }
         }
-
-        stage('Build') {
-            steps {
-                echo 'Building the application...'
-                // Add build commands here (e.g., Maven or npm)
+        stage("stage"){
+            steps{
+              echo "stage......."
             }
         }
-
-        stage('Test') {
-            steps {
-                echo 'Running tests...'
-                // Add testing commands here
+        stage("check"){
+            steps{
+              echo "check......."
             }
         }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying the application...'
-                // Add deployment commands (e.g., Docker, SCP, Kubernetes)
+        stage("develop"){
+            steps{
+              echo "develop......."
             }
         }
     }
