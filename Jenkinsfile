@@ -1,7 +1,10 @@
-
-
 pipeline {
     agent any
+
+    parameters {
+        string(name: 'USERNAME', defaultValue: '', description: 'Enter Username')
+        password(name: 'PASSWORD', defaultValue: '', description: 'Enter Password')
+    }
 
     environment {
         validUsername = 'user1'
@@ -12,11 +15,9 @@ pipeline {
         stage("Check Credentials") {
             steps {
                 script {
-                
-                    def username = 'user1'
-                    def password = '111'
+                    def username = params.USERNAME
+                    def password = params.PASSWORD
 
-             
                     if (username != validUsername || password != validPassword) {
                         error "Invalid username or password. Pipeline will not proceed."
                     }
@@ -27,7 +28,7 @@ pipeline {
         stage("Build") {
             when {
                 expression { 
-                    return username == validUsername && password == validPassword 
+                    return params.USERNAME == validUsername && params.PASSWORD == validPassword 
                 }
             }
             steps {
@@ -38,7 +39,7 @@ pipeline {
         stage("Stage") {
             when {
                 expression { 
-                    return username == validUsername && password == validPassword 
+                    return params.USERNAME == validUsername && params.PASSWORD == validPassword 
                 }
             }
             steps {
@@ -49,7 +50,7 @@ pipeline {
         stage("Check") {
             when {
                 expression { 
-                    return username == validUsername && password == validPassword 
+                    return params.USERNAME == validUsername && params.PASSWORD == validPassword 
                 }
             }
             steps {
@@ -60,7 +61,7 @@ pipeline {
         stage("Develop") {
             when {
                 expression { 
-                    return username == validUsername && password == validPassword 
+                    return params.USERNAME == validUsername && params.PASSWORD == validPassword 
                 }
             }
             steps {
