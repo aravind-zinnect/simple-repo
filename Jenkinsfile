@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'your-docker-image-name'
     }
-    
+
     stages {
         stage('Checkout') {
             steps {
@@ -35,7 +35,6 @@ pipeline {
             steps {
                 // Push Docker image to DockerHub or other registry
                 script {
-                    sh 'docker login -u your-username -p your-password'
                     sh 'docker push $DOCKER_IMAGE'
                 }
             }
