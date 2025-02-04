@@ -1,27 +1,28 @@
+
+
 pipeline {
     agent any
 
     environment {
-        validUsername = 'user1'
-        validPassword = '111'
+        username = 'user1'
+        password = '111'
     }
 
     stages {
-        stage("Check Credentials") {
+        stage("Get User Credentials") {
             steps {
                 script {
-                    // Prompt user for username and password
-                    def userInput = input message: 'Please enter credentials', parameters: [
-                        string(name: 'Username', defaultValue: '', description: 'Enter Username'),
-                        password(name: 'Password', defaultValue: '', description: 'Enter Password')
-                    ]
-                    
-                    // Extract input values
-                    def username = userInput['Username']
-                    def password = userInput['Password']
+                    // Prompt user for input
+                    def userInput = input(
+                        message: 'Enter credentials',
+                        parameters: [
+                            string(name: 'userInputName', defaultValue: '', description: 'Enter username'),
+                            password(name: 'userInputPassword', defaultValue: '', description: 'Enter password')
+                        ]
+                    )
 
-                    // Check if the provided credentials are correct
-                    if (username != validUsername || password != validPassword) {
+                    // Compare entered credentials with stored values
+                    if (userInput.userInputName != username || userInput.userInputPassword != password) {
                         error "Invalid username or password. Pipeline will not proceed."
                     }
                 }
@@ -30,45 +31,46 @@ pipeline {
 
         stage("Build") {
             when {
-                expression { 
-                    return username == validUsername && password == validPassword 
+                expression {
+                    // Ensure credentials were validated in the previous stage
+                    return userInput.userInputName == username && userInput.userInputPassword == password
                 }
             }
             steps {
-                echo "build......."
+                echo "Build is successful."
             }
         }
-        
+
         stage("Stage") {
             when {
-                expression { 
-                    return username == validUsername && password == validPassword 
+                expression {
+                    return userInput.userInputName == username && userInput.userInputPassword == password
                 }
             }
             steps {
-                echo "stage......."
+                echo "Stage executed."
             }
         }
 
         stage("Check") {
             when {
-                expression { 
-                    return username == validUsername && password == validPassword 
+                expression {
+                    return userInput.userInputName == username && userInput.userInputPassword == password
                 }
             }
             steps {
-                echo "check......."
+                echo "Check stage executed."
             }
         }
 
         stage("Develop") {
             when {
-                expression { 
-                    return username == validUsername && password == validPassword 
+                expression {
+                    return userInput.userInputName == username && userInput.userInputPassword == password
                 }
             }
             steps {
-                echo "develop......."
+                echo "Develop stage executed."
             }
         }
     }
