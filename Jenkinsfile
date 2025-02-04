@@ -4,72 +4,65 @@ pipeline {
     environment {
         validUsername = 'user1'
         validPassword = '111'
-        validUsername2 = 'user2'
-        validPassword2 = '222'
     }
 
     stages {
-        stage("Check Credentials") {
+        stage("Get Credentials") {
             steps {
                 script {
-                    // Hardcoded credentials (for example purposes, set by the user or from a parameter)
-                    def username = 'user1'  // Replace with dynamic value if needed
-                    def password = '111'    // Replace with dynamic value if needed
+                    // Dynamic input for username and password
+                    def username = input message: 'Enter Username', parameters: [string(defaultValue: '', description: 'Enter your username', name: 'Username')]
+                    def password = input message: 'Enter Password', parameters: [password(defaultValue: '', description: 'Enter your password', name: 'Password')]
 
-                    // Check if the provided credentials match any valid set
-                    if ((username == validUsername && password == validPassword) ||
-                        (username == validUsername2 && password == validPassword2)) {
-                        echo "Valid credentials: ${username}"
-                    } else {
+                    // Check if the provided credentials are correct
+                    if (username != validUsername || password != validPassword) {
                         error "Invalid username or password. Pipeline will not proceed."
                     }
                 }
             }
         }
 
-        // If user1 credentials are valid, execute these stages
         stage("Build") {
             when {
-                expression {
-                    return (username == validUsername && password == validPassword)
+                expression { 
+                    return username == validUsername && password == validPassword 
                 }
             }
             steps {
-                echo "Build stage for user1"
+                echo "build......."
             }
         }
         
         stage("Stage") {
             when {
-                expression {
-                    return (username == validUsername && password == validPassword)
+                expression { 
+                    return username == validUsername && password == validPassword 
                 }
             }
             steps {
-                echo "Stage for user1"
+                echo "stage......."
             }
         }
 
-        // If user2 credentials are valid, execute these stages
         stage("Check") {
             when {
-                expression {
-                    return (username == validUsername2 && password == validPassword2)
+                expression { 
+                    return username == validUsername && password == validPassword 
                 }
             }
             steps {
-                echo "Check stage for user2"
+                echo "check......."
             }
         }
 
         stage("Develop") {
             when {
-                expression {
-                    return (username == validUsername2 && password == validPassword2)
+                expression { 
+                    return username == validUsername && password == validPassword 
                 }
             }
             steps {
-                echo "Develop stage for user2"
+                echo "develop......."
             }
         }
     }
