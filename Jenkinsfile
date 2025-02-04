@@ -7,12 +7,18 @@ pipeline {
     }
 
     stages {
-        stage("Get Credentials") {
+        stage("Check Credentials") {
             steps {
                 script {
-                    // Dynamic input for username and password
-                    def username = input message: 'Enter Username', parameters: [string(defaultValue: '', description: 'Enter your username', name: 'Username')]
-                    def password = input message: 'Enter Password', parameters: [password(defaultValue: '', description: 'Enter your password', name: 'Password')]
+                    // Prompt user for username and password
+                    def userInput = input message: 'Please enter credentials', parameters: [
+                        string(name: 'Username', defaultValue: '', description: 'Enter Username'),
+                        password(name: 'Password', defaultValue: '', description: 'Enter Password')
+                    ]
+                    
+                    // Extract input values
+                    def username = userInput['Username']
+                    def password = userInput['Password']
 
                     // Check if the provided credentials are correct
                     if (username != validUsername || password != validPassword) {
