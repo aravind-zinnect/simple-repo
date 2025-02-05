@@ -10,20 +10,12 @@ pipeline {
         stage("Check Credentials") {
             steps {
                 script {
-                    // Prompt the user to enter username and password
-                    def userInput = input(
-                        message: 'Please enter your credentials',
-                        parameters: [
-                            string(name: 'username', defaultValue: '', description: 'Enter username'),
-                            password(name: 'password', defaultValue: '', description: 'Enter password')
-                        ]
-                    )
-                    
-                    def enteredUsername = userInput['username']
-                    def enteredPassword = userInput['password']
+                
+                    def username = 'user1'
+                    def password = '111'
 
-                    // Check the credentials
-                    if (enteredUsername != validUsername || enteredPassword != validPassword) {
+             
+                    if (username != validUsername || password != validPassword) {
                         error "Invalid username or password. Pipeline will not proceed."
                     }
                 }
@@ -32,46 +24,45 @@ pipeline {
 
         stage("Build") {
             when {
-                expression {
-                    // Check if credentials are valid
-                    return enteredUsername == validUsername && enteredPassword == validPassword
+                expression { 
+                    return username == validUsername && password == validPassword 
                 }
             }
             steps {
-                echo "Building......."
+                echo "build......."
             }
         }
-
+        
         stage("Stage") {
             when {
-                expression {
-                    return enteredUsername == validUsername && enteredPassword == validPassword
+                expression { 
+                    return username == validUsername && password == validPassword 
                 }
             }
             steps {
-                echo "Stage......."
+                echo "stage......."
             }
         }
 
         stage("Check") {
             when {
-                expression {
-                    return enteredUsername == validUsername && enteredPassword == validPassword
+                expression { 
+                    return username == validUsername && password == validPassword 
                 }
             }
             steps {
-                echo "Check......."
+                echo "check......."
             }
         }
 
         stage("Develop") {
             when {
-                expression {
-                    return enteredUsername == validUsername && enteredPassword == validPassword
+                expression { 
+                    return username == validUsername && password == validPassword 
                 }
             }
             steps {
-                echo "Develop......."
+                echo "develop......."
             }
         }
     }
